@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Indiana Hoosiers Basketball News</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      color: #990000;
+    }
+    .news, .tweets {
+      margin-bottom: 30px;
+    }
+    a {
+      display: block;
+      margin: 5px 0;
+      color: #0645AD;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>Indiana Hoosiers Basketball News</h1>
+
+  <div class="news" id="news-list">
+    <!-- News fetched via API -->
+  </div>
+
+  <div class="tweets">
+    <h2>Live Tweets from @IndianaMBB</h2>
+    <a class="twitter-timeline" data-height="400" href="https://twitter.com/IndianaMBB">Tweets by IndianaMBB</a>
+
+    <h2>Live Tweets from @InsideTheHall</h2>
+    <a class="twitter-timeline" data-height="400" href="https://twitter.com/InsideTheHall">Tweets by InsideTheHall</a>
+
+    <h2>Live Tweets from @CrimsonCast</h2>
+    <a class="twitter-timeline" data-height="400" href="https://twitter.com/CrimsonCast">Tweets by CrimsonCast</a>
+  </div>
+
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+  <script>
+    async function fetchNews() {
+      try {
+        const response = await fetch("https://newsdata.io/api/1/news?apikey=pub_855830bb41e5644ccbc792e0b38a1c7533d9b&q=Indiana%20Hoosiers%20Basketball&language=en");
+        const data = await response.json();
+        const newsList = document.getElementById("news-list");
+        newsList.innerHTML = "";
+        data.results.slice(0, 10).forEach(article => {
+          const a = document.createElement("a");
+          a.href = article.link;
+          a.textContent = article.title;
+          a.target = "_blank";
+          newsList.appendChild(a);
+        });
+      } catch (error) {
+        console.error("Error fetching news:", error);
+      }
+    }
+
+    fetchNews();
+    setInterval(fetchNews, 60000);
+  </script>
+</body>
+</html>
